@@ -2,7 +2,7 @@
 
 This repo contains microservices of Open Community Map used for
 
--   API
+-   [API](docs/API.md)
 -   internal maintenance tasks
 
 ## Installation
