@@ -49,11 +49,28 @@ const app = express();
 // Automatically allow cross-origin requests
 // app.use(cors({ origin: true }));
 
-// Add middleware to authenticate requests
-app.use(authMiddleware);
+app.use(
+    (
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction
+    ) => {
+        console.log(
+            'Req:',
+            req.method,
+            req.path,
+            JSON.stringify(req.params),
+            JSON.stringify(req.query)
+        );
+
+        next();
+    }
+);
+
+const routerObject = express.Router();
 
 // build multiple CRUD interfaces:
-app.get('/:id', (req, res) =>
+routerObject.get('/:id', (req, res) =>
     getObject((req as any).auth.origin, req.params.id)
         .then((data) => {
             if (data) {
@@ -64,21 +81,23 @@ app.get('/:id', (req, res) =>
         })
         .catch((err) => res.status(500).send(err.message))
 );
-app.post('/', async (req, res) =>
+routerObject.post('/', async (req, res) =>
     promise2resp(res)(() => postObject((req as any).auth.origin, req.body))
 );
-app.put('/:id', async (req, res) =>
+routerObject.put('/:id', async (req, res) =>
     promise2resp(res)(() =>
         updateObject((req as any).auth.origin, req.params.id, req.body)
     )
 );
-app.delete('/:id', async (req, res) =>
+routerObject.delete('/:id', async (req, res) =>
     promise2resp(res)(() =>
         deleteObject((req as any).auth.origin, req.params.id)
     )
 );
 // TODO
-// app.get('/', (req, res) => res.send(findObjects));
+routerObject.get('/', (req, res) => res.send('HEY!'));
+
+app.use('/api/v0/object', authMiddleware, routerObject);
 
 // Expose Express API as a single Cloud Function:
 exports.object = functions.https.onRequest(app);
