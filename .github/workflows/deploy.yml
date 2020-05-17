@@ -37,7 +37,6 @@ jobs:
       - name: Verify
         run: |
           yarn --cwd functions lint
-          yarn --cwd functions build
 
       - name: Deploy to Firebase
         env:
@@ -45,6 +44,7 @@ jobs:
           GITHUB_REF: ${{ github.ref }}
           GITHUB_HEAD_REF: ${{ github.head_ref }}
         # NOTE: force flag is used to automatically delete any functions which are removed
+        # NOTE: Build is run as part of predeploy
         run: |
           $(yarn bin)/firebase-ci deploy --force
 
