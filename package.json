@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/opencommunitymap/communitymap-cloud-functions#readme",
   "devDependencies": {
+    "firebase-ci": "^0.13.0",
     "firebase-tools": "^8.2.0"
   }
 }
