@@ -5,7 +5,9 @@ import { postObject, getObject, updateObject, deleteObject } from './object';
 firebase.initializeApp();
 
 export const helloWorld = functions.https.onRequest((request, response) => {
-    response.send('Hello from Firebase! ' + request.query.gaga);
+    response.send(
+        'Hello from Firebase! Query param "gaga" is:' + request.query.gaga
+    );
 });
 
 const validateToken = async (token: string) => {
