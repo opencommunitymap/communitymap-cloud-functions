@@ -18,8 +18,10 @@ HTTP POST request with JSON content. Fields:
 
 -   type - _string, mandatory, currently supported ones: chat, help, offer, place_
 -   title - _mandatory_
+-   short_description - optional, if exists will be shown on map when mouse is hovering over object
 -   description - _if missing, title will be used_
 -   loc - _object: {latitude: number, longitude: number}_
+-   logoURL - optional, if exists, will be shown on map
 
 Returns the created object with id.
 
