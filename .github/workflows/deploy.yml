@@ -5,7 +5,7 @@ on:
     branches:
       - master
       - next
-      - production
+      - prod
 
 jobs:
   deploy:
@@ -49,12 +49,12 @@ jobs:
           $(yarn bin)/firebase-ci deploy --force
 
       - name: Check if version has been updated
-        if: github.ref == 'refs/heads/production'
+        if: github.ref == 'refs/heads/prod'
         id: check
         uses: EndBug/version-check@v1
 
       - name: Create Release
-        if: github.ref == 'refs/heads/production' && steps.check.outputs.changed == 'true'
+        if: github.ref == 'refs/heads/prod' && steps.check.outputs.changed == 'true'
         id: create_release
         uses: actions/create-release@latest
         env:
