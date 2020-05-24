@@ -47,12 +47,24 @@ export const postObject = async (
     data: Partial<ObjectItemInput>
 ) => {
     console.log('post object:', { origin, data });
-    const { title, description, type, valid_until, loc } = data;
+    const {
+        title,
+        short_description = null,
+        description,
+        type,
+        valid_until,
+        loc,
+        logoURL = null,
+        url = null,
+    } = data;
     assertLocation(loc);
     const timenow = new Date().toISOString();
     const itemData: Partial<ObjectItem> = {
         title: title || description,
         description: description || title,
+        short_description,
+        logoURL,
+        url,
         loc: new firebase.firestore.GeoPoint(loc!.latitude, loc!.longitude),
         valid_until: valid_until || null,
         type,
@@ -77,11 +89,23 @@ export const updateObject = async (
     if (!id || !origin)
         throw new Error('One of mandatory arguments is missing');
 
-    const { title, description, type, valid_until, loc } = data;
+    const {
+        title,
+        short_description,
+        description,
+        type,
+        valid_until,
+        loc,
+        logoURL,
+        url,
+    } = data;
     const timenow = new Date().toISOString();
     const itemData: Partial<ObjectItem> = dropUndefined({
         title: title ?? description,
         description: description ?? title,
+        short_description,
+        logoURL,
+        url,
         loc: loc
             ? new firebase.firestore.GeoPoint(loc.latitude, loc.longitude)
             : undefined,
