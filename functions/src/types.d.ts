@@ -5,9 +5,12 @@ export interface Location {
 export interface ObjectItemInput {
     title: string;
     description: string;
+    short_description: string | null;
     type: 'chat' | 'request' | 'offer' | 'donation' | 'place';
     valid_until: string | null;
     loc: Location;
+    logoURL: string | null;
+    url: string | null;
 }
 export interface ObjectItem extends ObjectItemInput {
     author: string;
