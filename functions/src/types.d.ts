@@ -11,6 +11,7 @@ export interface ObjectItemInput {
     loc: Location;
     logoURL: string | null;
     url: string | null;
+    external_data: any;
 }
 export interface ObjectItem extends ObjectItemInput {
     author: string;

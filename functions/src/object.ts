@@ -58,6 +58,7 @@ export const postObject = async (
         loc,
         logoURL = null,
         url = null,
+        external_data = null,
     } = data;
     assertLocation(loc);
     const timenow = new Date().toISOString();
@@ -67,6 +68,7 @@ export const postObject = async (
         short_description,
         logoURL,
         url,
+        external_data,
         loc: new firebase.firestore.GeoPoint(loc!.latitude, loc!.longitude),
         valid_until: valid_until || null,
         type,
@@ -100,6 +102,7 @@ export const updateObject = async (
         loc,
         logoURL,
         url,
+        external_data,
     } = data;
     const timenow = new Date().toISOString();
     const itemData: Partial<ObjectItem> = dropUndefined({
@@ -108,6 +111,7 @@ export const updateObject = async (
         short_description,
         logoURL,
         url,
+        external_data,
         loc: loc
             ? new firebase.firestore.GeoPoint(loc.latitude, loc.longitude)
             : undefined,
