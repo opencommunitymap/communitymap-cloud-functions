@@ -23,6 +23,7 @@ HTTP POST request with JSON content. Fields:
 -   loc - _object: {latitude: number, longitude: number}_
 -   logoURL - optional, if exists, will be shown on map
 -   url - optional, external link to object's website or page in partner platform
+-   external_data - optional, some blackbox data stored by 3rd party
 
 Returns the created object with id.
 
