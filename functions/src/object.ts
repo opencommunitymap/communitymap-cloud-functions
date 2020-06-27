@@ -1,6 +1,8 @@
 import * as firebase from 'firebase-admin';
 import { ObjectItem, ObjectItemInput } from './types';
 
+const jj = (data: any) => JSON.stringify(data);
+
 const assertLocation = (loc: any) => {
     if (!loc?.latitude || !loc?.longitude) throw new Error('Wrong loc format');
 };
@@ -36,7 +38,7 @@ const dbObj2Api = (doc: firebase.firestore.DocumentSnapshot) => {
 };
 
 export const getObject = async (origin: string, id: string) => {
-    console.log('get object', { origin, id });
+    console.log('get object', jj({ origin, id }));
     const doc = await firebase.firestore().collection('objects').doc(id).get();
     if (!doc.exists) return null;
     return dbObj2Api(doc);
@@ -46,7 +48,7 @@ export const postObject = async (
     origin: string,
     data: Partial<ObjectItemInput>
 ) => {
-    console.log('post object:', { origin, data });
+    console.log('post object:', jj({ origin, data }));
     const {
         title,
         short_description = null,
@@ -56,6 +58,7 @@ export const postObject = async (
         loc,
         logoURL = null,
         url = null,
+        external_data = null,
     } = data;
     assertLocation(loc);
     const timenow = new Date().toISOString();
@@ -65,6 +68,7 @@ export const postObject = async (
         short_description,
         logoURL,
         url,
+        external_data,
         loc: new firebase.firestore.GeoPoint(loc!.latitude, loc!.longitude),
         valid_until: valid_until || null,
         type,
@@ -76,7 +80,7 @@ export const postObject = async (
     assertAllDefined(itemData);
     const ref = await firebase.firestore().collection('objects').add(itemData);
     const doc = await ref.get();
-    console.log('Post Result:', doc.id, doc.data());
+    console.log('Post Result:', doc.id, jj(doc.data()));
     return dbObj2Api(doc);
 };
 
@@ -85,7 +89,7 @@ export const updateObject = async (
     id: string,
     data: Partial<ObjectItemInput>
 ) => {
-    console.log('update object:', { origin, id, data });
+    console.log('update object:', jj({ origin, id, data }));
     if (!id || !origin)
         throw new Error('One of mandatory arguments is missing');
 
@@ -98,6 +102,7 @@ export const updateObject = async (
         loc,
         logoURL,
         url,
+        external_data,
     } = data;
     const timenow = new Date().toISOString();
     const itemData: Partial<ObjectItem> = dropUndefined({
@@ -106,6 +111,7 @@ export const updateObject = async (
         short_description,
         logoURL,
         url,
+        external_data,
         loc: loc
             ? new firebase.firestore.GeoPoint(loc.latitude, loc.longitude)
             : undefined,
@@ -134,7 +140,7 @@ export const updateObject = async (
 };
 
 export const deleteObject = async (origin: string, id: string) => {
-    console.log('delete object:', { origin, id });
+    console.log('delete object:', jj({ origin, id }));
     if (!id || !origin)
         throw new Error('One of mandatory arguments is missing');
 

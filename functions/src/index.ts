@@ -2,6 +2,8 @@ import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as express from 'express';
 import { postObject, getObject, updateObject, deleteObject } from './object';
+const cors = require('cors');
+
 firebase.initializeApp();
 
 export const helloWorld = functions.https.onRequest((request, response) => {
@@ -49,7 +51,7 @@ const promise2resp = (res: express.Response) => (cb: () => Promise<any>) =>
 const app = express();
 
 // Automatically allow cross-origin requests
-// app.use(cors({ origin: true }));
+app.use(cors({ origin: true }));
 
 app.use(
     (
