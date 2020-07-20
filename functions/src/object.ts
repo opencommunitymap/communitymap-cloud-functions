@@ -44,6 +44,28 @@ export const getObject = async (origin: string, id: string) => {
     return dbObj2Api(doc);
 };
 
+interface ListObjectsProps {
+  origin?: string;
+  offset: number;
+  size: number;
+}
+export const listObjects = async (props: ListObjectsProps) => {
+  const { origin, offset, size } = props;
+  console.log('list objects', jj(props));
+  let ref: firebase.firestore.Query = firebase
+    .firestore()
+    .collection('objects')
+    .limit(offset + size);
+
+  if (origin) ref = ref.where('origin', '==', origin);
+
+  const snap = await ref.get();
+  const docs = offset ? snap.docs.slice(offset, offset + size) : snap.docs;
+  const objects = docs.map(dbObj2Api);
+
+  return objects;
+};
+
 export const postObject = async (
     origin: string,
     data: Partial<ObjectItemInput>

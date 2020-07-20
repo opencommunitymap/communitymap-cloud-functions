@@ -1,7 +1,13 @@
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as express from 'express';
-import { postObject, getObject, updateObject, deleteObject } from './object';
+import {
+  postObject,
+  getObject,
+  updateObject,
+  deleteObject,
+  listObjects,
+} from './object';
 const cors = require('cors');
 
 firebase.initializeApp();
@@ -85,6 +91,23 @@ routerObject.get('/:id', (req, res) =>
         })
         .catch((err) => res.status(500).send(err.message))
 );
+routerObject.get('/', (req, res) => {
+  const { offset = 0, size = 10, origin } = req.query;
+  const params = {
+    origin: origin as string | undefined, // can be different from own origin
+    size: +size,
+    offset: +offset,
+  };
+  return listObjects(params)
+    .then((data) => {
+      if (data) {
+        res.json(data);
+      } else {
+        res.status(404).send('Object not found.');
+      }
+    })
+    .catch((err) => res.status(500).send(err.message));
+});
 routerObject.post('/', async (req, res) =>
     promise2resp(res)(() => postObject((req as any).auth.origin, req.body))
 );
