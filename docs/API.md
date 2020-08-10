@@ -16,14 +16,14 @@ https://communitymap.online/api/v0/object/12345?token=<your_token>
 
 HTTP POST request with JSON content. Fields:
 
--   type - _string, mandatory, currently supported ones: chat, help, offer, place_
--   title - _mandatory_
--   short_description - optional, if exists will be shown on map when mouse is hovering over object
--   description - _if missing, title will be used_
--   loc - _object: {latitude: number, longitude: number}_
--   logoURL - optional, if exists, will be shown on map
--   url - optional, external link to object's website or page in partner platform
--   external_data - optional, some blackbox data stored by 3rd party
+- type - _string, mandatory, currently supported ones: chat, help, offer, place_
+- title - _mandatory_
+- short_description - optional, if exists will be shown on map when mouse is hovering over object
+- description - _if missing, title will be used_
+- loc - _object: {latitude: number, longitude: number}_
+- logoURL - optional, if exists, will be shown on map
+- url - optional, external link to object's website or page in partner platform
+- external_data - optional, some blackbox data stored by 3rd party
 
 Returns the created object with id.
 
@@ -59,7 +59,21 @@ curl -v \
   'https://communitymap.online/api/v0/object/A9NSU6tja06Ne211JwzLfGt?token=<your_token>'
 ```
 
-### Read object
+### List objects
+
+HTTP GET request returing list of objects sorted by _id_. The query parameters allow to control:
+
+- origin - filter objects for given origin only, optional
+- offset - data offset, used when loading data on chunks or pages; optional, default: 0
+- size - max number of items in result set; optional, default: 10
+
+```
+curl -v \
+  -X GET \
+  'https://communitymap.online/api/v0/object?token=<your_token>&origin=testOrigin'
+```
+
+### Read single object
 
 HTTP GET request with object _id_ in the URL. You can currently read any object existing in the platform.
 
